@@ -11,6 +11,8 @@ const User = require("./models/user.model")
 
 //Routes
 const userRoutes = require('./routes/users')
+const mapRoutes = require('./routes/maps')
+
 
 //Configuring...
 const port = process.env.PORT || 4000
@@ -23,6 +25,7 @@ require('./passport')(passport)
 
 //Route Registration
 app.use('/users', userRoutes)
+app.use('/maps', mapRoutes)
 
 //Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')))

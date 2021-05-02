@@ -1,0 +1,12 @@
+<p>maps:</p>
+<div class="map-box-grid">
+    <div *ngIf="user?.maps?.length == 0">No Maps</div>
+    <div class='map-box' *ngFor="let map of user?.maps">
+        <p>{{map.name}}</p>
+        <p>{{map.width}}</p>
+        <p>{{map.height}}</p>
+    </div>
+    <div class='map-box'>
+        <button>Add Map</button>
+    </div>
+</div>
