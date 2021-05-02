@@ -1,0 +1,50 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <p class="help">{{helpMessage}}</p>
+  <br *ngIf="!helpMessage">
+  <p>
+    <label for="username">username </label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      formControlName="username"
+    />
+    <span class="error-msg" *ngIf="username?.errors?.required">username required.</span>
+    <span class="error-msg" *ngIf="username?.errors?.minlength">too short.</span>
+  </p>
+  <p>
+    <label for="username">e - mail </label>
+    <input type="text" id="email" name="email" formControlName="email" />
+    <span class="error-msg" *ngIf="email?.errors?.required">e - mail required.</span>
+    <span class="error-msg" *ngIf="email?.errors?.minlength">too short.</span>
+    <span class="error-msg" *ngIf="email?.errors?.pattern">invalid format.</span>
+  </p>
+  <p>
+    <label for="username">password </label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      formControlName="password"
+    />
+    <span class="error-msg" *ngIf="password?.errors?.required">password required.</span>
+    <span class="error-msg" *ngIf="password?.errors?.minlength">too short.</span>
+  </p>
+  <p>
+    <label for="username">password </label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      formControlName="password2"
+    />
+    <span class="error-msg" *ngIf="password2?.errors?.required">password confirm required.</span>
+    <span class="error-msg" *ngIf="registerForm?.errors?.mismatch">passwords do not match.</span>
+  </p>
+  <input
+    type="submit"
+    class="btn"
+    [disabled]="registerForm.invalid"
+    value="Submit"
+  />
+</form>
