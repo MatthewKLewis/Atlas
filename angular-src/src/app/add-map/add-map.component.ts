@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CanvasService } from '../services/canvas.service';
+
 import {
   FormBuilder,
   FormControl,
@@ -14,14 +16,14 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./add-map.component.scss'],
 })
 export class AddMapComponent implements OnInit {
-
-  canvas!: HTMLCanvasElement
-  ctx!: CanvasRenderingContext2D
+  canvas!: HTMLCanvasElement;
+  ctx!: CanvasRenderingContext2D;
 
   addMapForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
+    public canvasService: CanvasService,
     private userService: UserService,
     private router: Router
   ) {
@@ -29,26 +31,23 @@ export class AddMapComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
   }
-  get name() {    return this.addMapForm.get('name');  }
-
-  ngOnInit(): void {
-    var root = document.querySelector('app-add-map')
-    this.canvas = <HTMLCanvasElement>root?.querySelector('#canvas')
-    this.ctx = <CanvasRenderingContext2D>this.canvas.getContext('2d')
-    console.log(this.canvas.width, this.canvas.height)
-    
-    this.ctx.fillStyle = 'blue'
-    this.ctx.fillRect(10,10,10,10)
+  get name() {
+    return this.addMapForm.get('name');
   }
 
-  onSubmit() {
-
+  ngOnInit(): void {
+    var root = document.querySelector('app-add-map');
+    this.canvas = <HTMLCanvasElement>root?.querySelector('#canvas');
+    this.ctx = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+    this.canvasService.initialize(this.ctx);
   }
 
   saveImage() {
     var link = document.createElement('a');
     link.download = 'download.png';
-    link.href = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+    link.href = this.canvas
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
     link.click();
   }
 }
