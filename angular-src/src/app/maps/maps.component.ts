@@ -15,9 +15,8 @@ export class MapsComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getProfile().subscribe((res:any)=>{
       this.user = res.user
-      this.user.maps.push({name: 'Mappy'})
-      this.user.maps.push({name: 'Happy'})
-      this.user.maps.push({name: 'Sappy'})
+      this.user.maps.push({name: 'Map 1'})
+      this.user.maps.push({name: 'Map 2'})
     }, (err)=>{
       console.log('ERROR!')
       console.log(err)

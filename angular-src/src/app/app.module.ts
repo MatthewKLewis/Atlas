@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './guards/auth.guard';
 import { MapsComponent } from './maps/maps.component';
+import { AddMapComponent } from './add-map/add-map.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MapsComponent } from './maps/maps.component';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    MapsComponent
+    MapsComponent,
+    AddMapComponent
   ],
   imports: [
     BrowserModule,
