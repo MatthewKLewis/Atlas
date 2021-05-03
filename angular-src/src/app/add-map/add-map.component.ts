@@ -41,5 +41,14 @@ export class AddMapComponent implements OnInit {
     this.ctx.fillRect(10,10,10,10)
   }
 
-  onSubmit() {}
+  onSubmit() {
+
+  }
+
+  saveImage() {
+    var link = document.createElement('a');
+    link.download = 'download.png';
+    link.href = this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+    link.click();
+  }
 }

@@ -1,16 +1,6 @@
-<form [formGroup]="addMapForm" (ngSubmit)="onSubmit()">
-
-  <canvas id="canvas" width="400" height="400" class="canvas"></canvas>
-
-  <p>
-    <label for="name">name </label>
-    <input type="text" id="name" name="name" formControlName="name" />
-    <span class="error-msg" *ngIf="name?.errors?.required">name required.</span>
-  </p>
-  <input
-    type="submit"
-    class="btn"
-    [disabled]="addMapForm.invalid"
-    value="Submit"
-  />
-</form>
+<canvas id="canvas" width="400" height="400" class="canvas"></canvas>
+<br>
+<button>randomize</button>
+<button>submit</button>
+<br>
+<button (click)="saveImage()">save</button>
