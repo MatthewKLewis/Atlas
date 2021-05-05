@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Terrain, Tile } from '../models/terrain';
 
-const GRID_SQUARE_SIZE = 8;
-const GRID_EDGE_SIZE = 60
+const GRID_SQUARE_SIZE = 6;
+const GRID_EDGE_SIZE = 100
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class CanvasService {
   ctx: any;
   canvas: any;
   terrain: Terrain;
-  mousedTile: Tile = new Tile(-1,-1,-1)
+  mousedTile: Tile = new Tile(-1,-1,-1,-1)
 
   constructor() {
     this.terrain = new Terrain(GRID_EDGE_SIZE);
@@ -32,33 +32,41 @@ export class CanvasService {
     for (let i = 0; i < this.terrain.tiles.length; i++) {
       if (this.terrain.tiles[i].x == pixelToGridX && this.terrain.tiles[i].y == pixelToGridY) {
         this.mousedTile = this.terrain.tiles[i]
-      }      
+      }
     }
+  }
+
+  addNoise() {
+    this.terrain.addNoise()
+    this.render()
   }
 
   render() {
     this.terrain.tiles.forEach((tile: Tile) => {
-      switch (tile.i) {
+      switch (tile.height) {
+        case -1:
+          this.ctx.fillStyle = '#0c1b33';
+          break;
         case 0:
-          this.ctx.fillStyle = 'blue';
+          this.ctx.fillStyle = '#0d2c55';
           break;
         case 1:
-          this.ctx.fillStyle = 'aquamarine';
+          this.ctx.fillStyle = '#176814';
           break;
         case 2:
           this.ctx.fillStyle = 'green';
           break;
         case 3:
-          this.ctx.fillStyle = 'chartreuse';
+          this.ctx.fillStyle = '#92d822';
           break;
         case 4:
           this.ctx.fillStyle = 'yellow';
           break;
         case 5:
-          this.ctx.fillStyle = 'orange';
+          this.ctx.fillStyle = '#f09928';
           break;
         default:
-          this.ctx.fillStyle = 'pink';
+          this.ctx.fillStyle = 'white';
           break;
       }
       this.ctx.fillRect(

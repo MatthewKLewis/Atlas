@@ -1,20 +1,24 @@
 export class Tile {
+  index: number;
   x: number;
   y: number;
-  i: number;
+  height: number;
   content: Array<any>;
 
-  constructor(x: number, y: number, i: number) {
+  constructor(x: number, y: number, height: number, index: number) {
+    this.index = index;
     this.x = x;
     this.y = y;
-    this.i = i;
+    this.height = height;
     this.content = [];
   }
 
-  addHeight(chance: number) {
-    if (this.i != 0) {
-      Math.random() < chance ? this.i++ : null;
-    }
+  addHeight() {
+    this.height++;
+  }
+
+  reduceHeight() {
+    this.height--;
   }
 }
 
@@ -31,19 +35,21 @@ export class Terrain {
     this.iterationsAdded = 0;
     for (let y = 0; y < this.edgeLength; y++) {
       for (let x = 0; x < this.edgeLength; x++) {
-        this.tiles.push(new Tile(x, y, Math.random() < 0.5 ? 1 : 0));
+        this.tiles.push(
+          new Tile(x, y, Math.random() < 0.51 ? 1 : 0, x + y * this.edgeLength)
+        );
       }
     }
-    this.smooth(3);
-    this.addLevel(3);
+    this.smooth(4);
+    this.beachify(5);
   }
 
   findSurroundingTiles(tileIndex: number) {
     var surroundingTiles = {
-      topTile: new Tile(-1, -1, -1),
-      bottomTile: new Tile(-1, -1, -1),
-      leftTile: new Tile(-1, -1, -1),
-      rightTile: new Tile(-1, -1, -1),
+      topTile: new Tile(-1, -1, -1, -1),
+      bottomTile: new Tile(-1, -1, -1, -1),
+      leftTile: new Tile(-1, -1, -1, -1),
+      rightTile: new Tile(-1, -1, -1, -1),
       position: 'error',
     };
     if (this.tiles[tileIndex].x == 0 && this.tiles[tileIndex].y == 0) {
@@ -118,85 +124,124 @@ export class Terrain {
     }
   }
 
-  addLevel(iterations:number) {
-    for (let i = 0; i < iterations; i++) {
-      this.iterationsAdded++;
+  addNoise() {
+    this.tiles.forEach((tile: Tile) => {
+      if (tile.height != 0 && Math.random() > .5) tile.addHeight()
+      if (tile.height == 0 && Math.random() > .3) tile.reduceHeight()
+    });
+  }
+
+  beachify(level: number) {
+    var height = 1;
+    for (let i = 1; i <= level; i++) {
       this.tiles.forEach((tile: any) => {
-        tile.addHeight(0.5 - (this.iterationsAdded / 10));
-      });    
+        var surroundingTiles = this.findSurroundingTiles(tile.index);
+        if (
+          tile.height != 0 &&
+          surroundingTiles.position == 'middle' &&
+          surroundingTiles.topTile.height >= height &&
+          surroundingTiles.bottomTile.height >= height &&
+          surroundingTiles.leftTile.height >= height &&
+          surroundingTiles.rightTile.height >= height
+        ) {
+          tile.addHeight();
+        }
+      });
+      height++;
     }
   }
 
-  smooth(iterations:number) {
+  smooth(iterations: number) {
     for (let j = 0; j < iterations; j++) {
       for (let i = 0; i < this.count; i++) {
-        var surroundingTile = this.findSurroundingTiles(i);
-        switch (surroundingTile.position) {
+        var surroundingTiles = this.findSurroundingTiles(i);
+        switch (surroundingTiles.position) {
           case 'top-left':
-            if (surroundingTile.rightTile.i == surroundingTile.bottomTile.i) {
-              this.tiles[i].i = surroundingTile.rightTile.i;
+            if (
+              surroundingTiles.rightTile.height ==
+              surroundingTiles.bottomTile.height
+            ) {
+              this.tiles[i].height = surroundingTiles.rightTile.height;
             }
             break;
           case 'top-right':
-            if (surroundingTile.leftTile.i == surroundingTile.bottomTile.i) {
-              this.tiles[i].i = surroundingTile.leftTile.i;
+            if (
+              surroundingTiles.leftTile.height ==
+              surroundingTiles.bottomTile.height
+            ) {
+              this.tiles[i].height = surroundingTiles.leftTile.height;
             }
             break;
           case 'bot-left':
-            if (surroundingTile.topTile.i == surroundingTile.rightTile.i) {
-              this.tiles[i].i = surroundingTile.topTile.i;
+            if (
+              surroundingTiles.topTile.height ==
+              surroundingTiles.rightTile.height
+            ) {
+              this.tiles[i].height = surroundingTiles.topTile.height;
             }
             break;
           case 'bot-right':
-            if (surroundingTile.topTile.i == surroundingTile.leftTile.i) {
-              this.tiles[i].i = surroundingTile.topTile.i;
+            if (
+              surroundingTiles.topTile.height ==
+              surroundingTiles.leftTile.height
+            ) {
+              this.tiles[i].height = surroundingTiles.topTile.height;
             }
             break;
           case 'top-edge':
             if (
-              surroundingTile.leftTile.i == surroundingTile.bottomTile.i &&
-              surroundingTile.leftTile.i == surroundingTile.rightTile.i
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.bottomTile.height &&
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.rightTile.height
             ) {
-              this.tiles[i].i = surroundingTile.leftTile.i;
+              this.tiles[i].height = surroundingTiles.leftTile.height;
             }
             break;
           case 'bot-edge':
             if (
-              surroundingTile.leftTile.i == surroundingTile.topTile.i &&
-              surroundingTile.leftTile.i == surroundingTile.rightTile.i
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.topTile.height &&
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.rightTile.height
             ) {
-              this.tiles[i].i = surroundingTile.leftTile.i;
+              this.tiles[i].height = surroundingTiles.leftTile.height;
             }
             break;
           case 'right-edge':
             if (
-              surroundingTile.leftTile.i == surroundingTile.topTile.i &&
-              surroundingTile.leftTile.i == surroundingTile.bottomTile.i
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.topTile.height &&
+              surroundingTiles.leftTile.height ==
+                surroundingTiles.bottomTile.height
             ) {
-              this.tiles[i].i = surroundingTile.leftTile.i;
+              this.tiles[i].height = surroundingTiles.leftTile.height;
             }
             break;
           case 'left-edge':
             if (
-              surroundingTile.rightTile.i == surroundingTile.topTile.i &&
-              surroundingTile.rightTile.i == surroundingTile.bottomTile.i
+              surroundingTiles.rightTile.height ==
+                surroundingTiles.topTile.height &&
+              surroundingTiles.rightTile.height ==
+                surroundingTiles.bottomTile.height
             ) {
-              this.tiles[i].i = surroundingTile.rightTile.i;
+              this.tiles[i].height = surroundingTiles.rightTile.height;
             }
             break;
           case 'middle':
-            var sum = 0
-            if (surroundingTile.topTile.i > 0) sum++
-            if (surroundingTile.bottomTile.i > 0) sum++
-            if (surroundingTile.leftTile.i > 0) sum++
-            if (surroundingTile.rightTile.i > 0) sum++
-            if (sum <= 1) this.tiles[i].i = 0
-            if (sum >= 3) this.tiles[i].i = 1
+            var sum = 0;
+            if (surroundingTiles.topTile.height > 0) sum++;
+            if (surroundingTiles.bottomTile.height > 0) sum++;
+            if (surroundingTiles.leftTile.height > 0) sum++;
+            if (surroundingTiles.rightTile.height > 0) sum++;
+
+            if (sum <= 1) this.tiles[i].height = 0;
+            if (sum >= 3) this.tiles[i].height = 1;
             break;
           default:
             console.log('ERROR');
         }
       }
     }
-  }    
+  }
 }
