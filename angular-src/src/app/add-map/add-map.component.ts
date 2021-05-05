@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CanvasService } from '../services/canvas.service';
 
 import {
@@ -39,7 +39,17 @@ export class AddMapComponent implements OnInit {
     var root = document.querySelector('app-add-map');
     this.canvas = <HTMLCanvasElement>root?.querySelector('#canvas');
     this.ctx = <CanvasRenderingContext2D>this.canvas.getContext('2d');
-    this.canvasService.initialize(this.ctx);
+    this.canvasService.initialize(this.canvas, this.ctx);
+  }
+
+  reload() {
+    location.reload()
+  }
+
+  mouseOver(evt:any) {
+    var mouseX = evt.pageX - evt.originalTarget.offsetLeft;
+    var mouseY = evt.pageY - evt.originalTarget.offsetTop
+    this.canvasService.focusTileAt(mouseX, mouseY)
   }
 
   saveImage() {

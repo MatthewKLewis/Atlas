@@ -1,4 +1,6 @@
-<canvas id="canvas" width="400" height="400" class="canvas"></canvas>
-<br>
-<button (click)="canvasService.addLevel()">add level</button>
+<button (click)="reload()">refresh</button>
+<br />
+<canvas id="canvas" class="canvas" (mousemove)="mouseOver($event)"></canvas>
+<p>{{canvasService.mousedTile.i == 0 ? 'Water' : 'Land'}}</p>
+<br />
 <button (click)="saveImage()">save</button>
