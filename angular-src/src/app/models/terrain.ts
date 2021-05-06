@@ -18,10 +18,11 @@ export class Terrain {
         );
       }
     }
-    this.smooth(4);
-    this.beachify(5);
-    this.addNoise();
-    this.addCity(3);
+    this.smooth(4); //cellular automata
+    this.elevate(5); //peak in middle
+    this.addNoise(); //add noise
+    this.shallowfy(); //make tidal shallows
+    this.addCity(3); //add cities
     this.tiles.forEach((tile: Tile) => {
       tile.generateDescription();
     });
@@ -66,13 +67,13 @@ export class Terrain {
     });
   }
 
-  beachify(level: number) {
+  elevate(level: number) {
     var height = 1;
     for (let i = 1; i <= level; i++) {
       this.tiles.forEach((tile: any) => {
         var surroundingTiles = this.findSurroundingTiles(tile.index);
         if (
-          tile.height != 0 &&
+          tile.height > 0 &&
           surroundingTiles.position == 'middle' &&
           surroundingTiles.topTile.height >= height &&
           surroundingTiles.bottomTile.height >= height &&
@@ -84,6 +85,19 @@ export class Terrain {
       });
       height++;
     }
+  }
+
+  shallowfy() {
+    this.tiles.forEach((tile: any) => {
+      var surroundingTiles = this.findSurroundingTiles(tile.index);
+      if ((tile.height <= 0 && surroundingTiles.position == 'middle') && (
+        surroundingTiles.topTile.height >= 1 ||
+        surroundingTiles.bottomTile.height >= 1 ||
+        surroundingTiles.leftTile.height >= 1 ||
+        surroundingTiles.rightTile.height >= 1)) {
+        tile.height = 0;
+      }
+    });
   }
 
   findSurroundingTiles(tileIndex: number) {
