@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Terrain, Tile } from '../models/terrain';
+import { Terrain } from '../models/terrain';
+import { Tile } from '../models/tile';
+
 
 const GRID_SQUARE_SIZE = 6;
 const GRID_EDGE_SIZE = 100;
@@ -40,11 +42,6 @@ export class CanvasService {
         this.mousedTile = this.terrain.tiles[i]
       }
     }
-  }
-
-  addNoise() {
-    this.terrain.addNoise()
-    this.render()
   }
 
   render() {
