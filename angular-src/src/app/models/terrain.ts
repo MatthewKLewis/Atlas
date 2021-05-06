@@ -4,6 +4,7 @@ export class Tile {
   y: number;
   height: number;
   content: Array<any>;
+  description: string;
 
   constructor(x: number, y: number, height: number, index: number) {
     this.index = index;
@@ -11,10 +12,49 @@ export class Tile {
     this.y = y;
     this.height = height;
     this.content = [];
+    this.description = 'mouse over a tile';
   }
 
   addHeight() {
     this.height++;
+  }
+
+  generateDescription() {
+    switch (this.height) {
+      case -2:
+        this.description = 'city';
+        break;
+      case -1:
+        this.description = 'deep sea';
+        break;
+      case 0:
+        this.description = 'sea';
+        break;
+      case 1:
+        this.description = 'tidewater';
+        break;
+      case 2:
+        this.description = 'lowlands';
+        break;
+      case 3:
+        this.description = 'plains';
+        break;
+      case 4:
+        this.description = 'hills';
+        break;
+      case 5:
+        this.description = 'ridges';
+        break;
+      case 6:
+        this.description = 'heights';
+        break;
+      case 7:
+        this.description = 'mountains';
+        break;
+      default:
+        this.description = 'error';
+        break;
+    }
   }
 
   reduceHeight() {
@@ -42,6 +82,70 @@ export class Terrain {
     }
     this.smooth(4);
     this.beachify(5);
+    this.addNoise();
+    this.addCity(3);
+    this.tiles.forEach((tile: Tile) => {
+      tile.generateDescription();
+    });
+  }
+
+  /** METHODS **/
+  addCity(count: number) {
+    for (let i = 0; i < count; i++) {
+      var added = false;
+      while (!added) {
+        var tile = this.tiles[Math.floor(Math.random() * this.count + 1)];
+        var surrounds = this.findSurroundingTiles(tile.index);
+        if (
+          surrounds.topTile &&
+          surrounds.bottomTile &&
+          surrounds.rightTile &&
+          surrounds.leftTile
+        ) {
+          if (
+            tile.height > 0 &&
+            surrounds.topTile.height > 0 &&
+            surrounds.bottomTile.height > 0 &&
+            surrounds.rightTile.height > 0 &&
+            surrounds.leftTile.height > 0
+          ) {
+            tile.height = -2;
+            surrounds.topTile.height = -2;
+            surrounds.bottomTile.height = -2;
+            surrounds.rightTile.height = -2;
+            surrounds.leftTile.height = -2;
+            added = true;
+          }
+        }
+      }
+    }
+  }
+
+  addNoise() {
+    this.tiles.forEach((tile: Tile) => {
+      if (tile.height != 0 && Math.random() > 0.5) tile.addHeight();
+      if (tile.height == 0 && Math.random() > 0.3) tile.reduceHeight();
+    });
+  }
+
+  beachify(level: number) {
+    var height = 1;
+    for (let i = 1; i <= level; i++) {
+      this.tiles.forEach((tile: any) => {
+        var surroundingTiles = this.findSurroundingTiles(tile.index);
+        if (
+          tile.height != 0 &&
+          surroundingTiles.position == 'middle' &&
+          surroundingTiles.topTile.height >= height &&
+          surroundingTiles.bottomTile.height >= height &&
+          surroundingTiles.leftTile.height >= height &&
+          surroundingTiles.rightTile.height >= height
+        ) {
+          tile.addHeight();
+        }
+      });
+      height++;
+    }
   }
 
   findSurroundingTiles(tileIndex: number) {
@@ -124,31 +228,9 @@ export class Terrain {
     }
   }
 
-  addNoise() {
-    this.tiles.forEach((tile: Tile) => {
-      if (tile.height != 0 && Math.random() > .5) tile.addHeight()
-      if (tile.height == 0 && Math.random() > .3) tile.reduceHeight()
-    });
-  }
-
-  beachify(level: number) {
-    var height = 1;
-    for (let i = 1; i <= level; i++) {
-      this.tiles.forEach((tile: any) => {
-        var surroundingTiles = this.findSurroundingTiles(tile.index);
-        if (
-          tile.height != 0 &&
-          surroundingTiles.position == 'middle' &&
-          surroundingTiles.topTile.height >= height &&
-          surroundingTiles.bottomTile.height >= height &&
-          surroundingTiles.leftTile.height >= height &&
-          surroundingTiles.rightTile.height >= height
-        ) {
-          tile.addHeight();
-        }
-      });
-      height++;
-    }
+  getTileIndexFromCoords(x: number, y: number) {
+    var tileIndex = x + y * this.edgeLength;
+    return tileIndex;
   }
 
   smooth(iterations: number) {

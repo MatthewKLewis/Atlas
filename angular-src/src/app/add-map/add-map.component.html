@@ -1,7 +1,7 @@
 <button (click)="reload()">refresh</button>
 <br />
 <canvas id="canvas" class="canvas" (mousemove)="mouseOver($event)"></canvas>
-<p>{{canvasService.mousedTile.height <= 0 ? 'Water' : 'Land'}}</p>
+<p>{{canvasService.mousedTile.description}}</p>
 <br />
 <button (click)="canvasService.addNoise()">add noise</button>
 <button (click)="saveImage()">save</button>
