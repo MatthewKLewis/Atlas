@@ -1,6 +1,7 @@
 <button [routerLink]="['/']">home </button>
 <button *ngIf="!userService.checkExpired()" [routerLink]="['profile']">profile </button>
 <button *ngIf="!userService.checkExpired()" [routerLink]="['maps']">maps </button>
+<button *ngIf="!userService.checkExpired()" [routerLink]="['history']">history </button>
 <button *ngIf="userService.checkExpired()" [routerLink]="['register']">create account </button>
 
 <button *ngIf="userService.checkExpired()" class="float-right" [routerLink]="['login']">login </button>

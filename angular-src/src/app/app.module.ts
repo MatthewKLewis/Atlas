@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './guards/auth.guard';
 import { MapsComponent } from './maps/maps.component';
 import { AddMapComponent } from './add-map/add-map.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AddMapComponent } from './add-map/add-map.component';
     HomeComponent,
     ProfileComponent,
     MapsComponent,
-    AddMapComponent
+    AddMapComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

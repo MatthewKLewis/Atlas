@@ -14,7 +14,7 @@ export class Terrain {
     for (let y = 0; y < this.edgeLength; y++) {
       for (let x = 0; x < this.edgeLength; x++) {
         this.tiles.push(
-          new Tile(x, y, Math.random() < 0.51 ? 1 : 0, x + y * this.edgeLength)
+          new Tile(x, y, Math.random() < 0.50 ? 1 : 0, x + y * this.edgeLength)
         );
       }
     }

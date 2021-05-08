@@ -7,6 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './guards/auth.guard'
 import { MapsComponent } from './maps/maps.component';
 import { AddMapComponent } from './add-map/add-map.component';
+import { HistoryComponent } from './history/history.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -15,6 +16,8 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'maps', component: MapsComponent, canActivate: [AuthGuard]},
   {path: 'maps/add-map', component: AddMapComponent, canActivate: [AuthGuard]},
+  {path: 'history', component: HistoryComponent, canActivate: [AuthGuard]},
+
 ];
 
 @NgModule({
