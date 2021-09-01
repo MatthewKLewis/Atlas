@@ -10,14 +10,15 @@ import { UserService } from '../services/user.service';
 export class ProfileComponent implements OnInit, OnDestroy {
 
   @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
-    console.log("Processing before unload...");
-    // Do more processing...
+    this.userService.updateInventoryAndMoney(this.user).subscribe((res:any)=>{
+      console.log(res)
+    })
     event.returnValue = false;
-}
+  }
 
   user: any
   shopInventory: Map<string, any> = new Map()
-
+  
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {

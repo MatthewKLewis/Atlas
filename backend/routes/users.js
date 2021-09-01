@@ -43,7 +43,6 @@ router.post('/authenticate', (req, res, next)=>{
                             email: user.email
                         }
                     })
-                    //update Last Login for User
                     user.lastLogin = Date.now()
                     user.save()
                 } else {
@@ -63,11 +62,10 @@ router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res,
 })
 
 router.post('/updateInventoryAndMoney', passport.authenticate('jwt', {session: false}), (req, res, next)=>{
-    //console.log(req.body)
     req.user.inventory = req.body.inventory;
     req.user.money = req.body.money;
     req.user.save()
-    res.send('ok')
+    res.json({success: true, msg: "information saved."})
 })
 
 module.exports = router;
