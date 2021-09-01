@@ -6,6 +6,9 @@
         <hr>
 
         <p>Inventory</p>
+        <div *ngFor="let item of user.inventory; let index = index">
+            <p>{{index}}. {{item.name}}</p>
+        </div>
     </div>
 
     <div>

@@ -19,7 +19,7 @@ const userSchema = new Schema({
         "lastLogin" : {
             type: Date,
         },
-        "maps": [ {type: Schema.Types.ObjectId, ref: 'Map'} ],
+        "inventory" : [ { type: Object } ],
         "money" : {
             type: Number,
         }

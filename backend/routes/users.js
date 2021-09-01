@@ -11,7 +11,7 @@ router.post('/register', (req, res, next)=>{
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        maps: [],
+        inventory: [],
         money: 0,
         lastLogin: Date.now()
     });
@@ -60,6 +60,14 @@ router.post('/authenticate', (req, res, next)=>{
 
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
     res.json({user: req.user})
+})
+
+router.post('/updateInventoryAndMoney', passport.authenticate('jwt', {session: false}), (req, res, next)=>{
+    //console.log(req.body)
+    req.user.inventory = req.body.inventory;
+    req.user.money = req.body.money;
+    req.user.save()
+    res.send('ok')
 })
 
 module.exports = router;

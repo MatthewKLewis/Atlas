@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 
@@ -7,7 +7,13 @@ import { UserService } from '../services/user.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    console.log("Processing before unload...");
+    // Do more processing...
+    event.returnValue = false;
+}
 
   user: any
   shopInventory: Map<string, any> = new Map()
@@ -15,15 +21,13 @@ export class ProfileComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-
-    //Shop Defaults
     this.shopInventory.set('gundarium', {name: 'gundarium', price: 5, description: 'lunar titanium alloy'})
 
     this.userService.getProfile().subscribe((res:any)=>{
       this.user = res.user
       setInterval(()=>{
         this.user.money++;
-      }, 5000)
+      }, 500)
     },
     (err)=>{
       console.log('ERROR!')
@@ -31,11 +35,21 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.userService.updateInventoryAndMoney(this.user).subscribe((res:any)=>{
+      console.log(res)
+    })
+  }
+
   buy(shopItem: string) {
     var item = this.shopInventory.get(shopItem)
     if (item && item.price <= this.user.money) {
       this.user.money -= item.price;
+      this.user.inventory.push(item)
       console.log(item)
+      this.userService.updateInventoryAndMoney(this.user).subscribe((res:any)=>{
+        console.log(res)
+      })
     }
   }
 }

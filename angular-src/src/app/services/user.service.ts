@@ -53,6 +53,15 @@ export class UserService {
     });
     return this.http.get('http://localhost:4100/users/profile', {headers: headers})
   }
+
+  updateInventoryAndMoney(user: any) {
+    this.loadToken();
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authToken}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post('http://localhost:4100/users/updateInventoryAndMoney', user, {headers: headers}, )
+  }
   
   loadToken() {
     const token = localStorage.getItem('id_token')
