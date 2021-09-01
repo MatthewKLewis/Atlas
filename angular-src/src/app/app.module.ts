@@ -11,9 +11,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './guards/auth.guard';
-import { MapsComponent } from './maps/maps.component';
-import { AddMapComponent } from './add-map/add-map.component';
-import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -23,9 +20,6 @@ import { HistoryComponent } from './history/history.component';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    MapsComponent,
-    AddMapComponent,
-    HistoryComponent
   ],
   imports: [
     BrowserModule,
