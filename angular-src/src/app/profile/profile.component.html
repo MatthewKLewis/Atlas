@@ -1,4 +1,16 @@
-<div *ngIf="user">
-    <p>{{user.username}}</p>
-    <p>{{user.email}}</p>
+<div class="user-grid" *ngIf="user">
+    <div>
+        <p>User: {{user.username}} E-mail: {{user.email}}</p>
+        <p>Credits: {{user.money}}</p>
+
+        <hr>
+
+        <p>Inventory</p>
+    </div>
+
+    <div>
+        <button (click)="buy('gundarium')">Buy Gundarium Alloy - 5</button>
+    </div>
+
+
 </div>
