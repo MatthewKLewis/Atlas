@@ -11,7 +11,9 @@ router.post('/register', (req, res, next)=>{
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        maps: []
+        maps: [],
+        money: 0,
+        lastLogin: Date.now()
     });
     User.addUser(newUser, (err, user)=>{
         if (err){
@@ -26,24 +28,33 @@ router.post('/authenticate', (req, res, next)=>{
     const username = req.body.username
     const password = req.body.password
     User.findOne({username: username}).then((user)=>{
-        User.comparePassword(password, user.password, (err, isMatch)=>{
-            if (err) throw err;
-            if (isMatch) {
-                const token = jwt.sign(user.toJSON(), process.env.SECRET, {expiresIn: 604800})
-                res.json({
-                    success: true,
-                    msg: 'log in success', 
-                    token: token,
-                    user: {
-                        id: user._id,
-                        username: user.username,
-                        email: user.email
-                    }
-                })
-            } else {
-                return res.json({success: false, msg: "wrong password"})
-            }
-        })
+        if (user) {
+            User.comparePassword(password, user.password, (err, isMatch)=>{
+                if (err) throw err;
+                if (isMatch) {
+                    const token = jwt.sign(user.toJSON(), process.env.SECRET, {expiresIn: 604800})
+                    res.json({
+                        success: true,
+                        msg: 'log in success', 
+                        token: token,
+                        user: {
+                            id: user._id,
+                            username: user.username,
+                            email: user.email
+                        }
+                    })
+                    //update Last Login for User
+                    user.lastLogin = Date.now()
+                    user.save()
+                } else {
+                    return res.json({success: false, msg: "wrong password"})
+                }
+            })
+        } else {
+            return res.json({success: false, msg: "user not found"})
+        }
+    }, ()=>{
+        return res.json({success: false, msg: "login error"})
     })
 })
 

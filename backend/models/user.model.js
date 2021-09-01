@@ -16,9 +16,13 @@ const userSchema = new Schema({
             type: String,
             required: true
         },
-        "maps": [
-            {type: Schema.Types.ObjectId, ref: 'Map'}
-          ]
+        "lastLogin" : {
+            type: Date,
+        },
+        "maps": [ {type: Schema.Types.ObjectId, ref: 'Map'} ],
+        "money" : {
+            type: Number,
+        }
     }
 );
   
