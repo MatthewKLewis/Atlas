@@ -5,18 +5,31 @@
 hr {
     height: 1px;
     border: none;
-    background-color: black;
+    background-color: grey;
 }
 
 .user-grid {
     display: grid;
     grid-template-columns: 50% 50%;
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+.inventory-number {
+    position: fixed;
+    font-size: large;
+    left: 30%;
+}
+
+.grid-el {
+    border: 1px solid grey;
+    padding: 20px;
+    min-height: 260px;
 }
 
 .shop-list {
     display: grid;
     grid-template-columns: auto auto;
-    padding: 20px;
 }
 
 button {

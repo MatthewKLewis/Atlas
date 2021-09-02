@@ -1,5 +1,5 @@
 <div class="user-grid" *ngIf="userService.user">
-    <div>
+    <div class="grid-el">
         <p>User: {{userService.user.username}}</p> 
         <p>E-mail: {{userService.user.email}}</p>
         <h3>Credits: {{userService.user.money}}</h3>
@@ -8,11 +8,11 @@
 
         <p>Inventory</p>
         <div *ngFor="let item of userService.user.inventory | keyvalue">
-            Resource: <b>{{item.key}}</b> - - <b>{{item.value}}</b>
+            Resource: {{item.key}} - - <span class="inventory-number">{{item.value}}</span>
         </div>
     </div>
 
-    <div class="shop-list">
+    <div class="shop-list grid-el">
         <button 
             *ngFor="let item of shopInventory; let index = index"
             [disabled]="item.price > userService.user.money" 
@@ -23,6 +23,14 @@
                 <p>Buy {{item.name}}</p>
             </div>
         </button>
+    </div>
+
+    <div class="grid-el">
+        Mannquin
+    </div>
+
+    <div class="grid-el">
+        Last
     </div>
 
 
