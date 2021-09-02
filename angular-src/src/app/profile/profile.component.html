@@ -18,7 +18,10 @@
             [disabled]="item.price > userService.user.money" 
             (click)="buy(item.name)">
             <img class="shop-icon" src="#">
-            <p>Buy {{item.name}} - {{item.price}}</p>
+            <div class="details">
+                <p>${{item.price.toLocaleString()}}</p>
+                <p>Buy {{item.name}}</p>
+            </div>
         </button>
     </div>
 
