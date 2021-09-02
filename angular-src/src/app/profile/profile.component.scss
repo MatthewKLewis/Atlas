@@ -15,10 +15,16 @@ hr {
     column-gap: 10px;
 }
 
-.inventory-number {
-    position: fixed;
-    font-size: large;
-    left: 30%;
+.inventory-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.inventory-tile {
+    width: 100px;
+    height: 100px;
+    border: 1px solid red;
+    margin: 5px;
 }
 
 .grid-el {

@@ -7,8 +7,14 @@
         <hr>
 
         <p>Inventory</p>
-        <div *ngFor="let item of userService.user.inventory | keyvalue">
-            Resource: {{item.key}} - - <span class="inventory-number">{{item.value}}</span>
+        <div class="inventory-grid">
+            <div 
+                class="inventory-tile" 
+                *ngFor="let item of userService.user.inventory | keyvalue"
+                cdkDrag>
+                <span>{{item.value}}</span>
+                <p>{{item.key}}</p>
+            </div>
         </div>
     </div>
 
