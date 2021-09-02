@@ -40,9 +40,11 @@ export class UserService {
   }
 
   logOutUser() {
-    this.authToken = null
-    this.user = null
-    localStorage.clear()
+    this.updateInventoryAndMoney().subscribe((res:any)=>{
+      this.authToken = null
+      this.user = null
+      localStorage.clear()
+    })
   }
 
   getProfile() {

@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     event.returnValue = false;
   }
 
+  clock: any
   shopInventory: Map<string, any> = new Map()
   
   constructor(public userService: UserService, private router: Router) { }
@@ -25,9 +26,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.userService.getProfile().subscribe((res:any)=>{
       this.userService.user = res.user
-      setInterval(()=>{
+      this.clock = setInterval(()=>{
         this.userService.user.money++;
-      }, 500)
+      }, 1000)
     },
     (err)=>{
       console.log('ERROR!')
@@ -36,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.clock)
     this.userService.updateInventoryAndMoney().subscribe((res:any)=>{
       console.log(res)
     })
