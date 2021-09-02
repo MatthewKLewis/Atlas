@@ -11,7 +11,7 @@ router.post('/register', (req, res, next)=>{
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        inventory: [],
+        inventory: {},
         money: 0,
         lastLogin: Date.now()
     });

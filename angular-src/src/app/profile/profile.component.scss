@@ -8,3 +8,26 @@ hr {
     display: grid;
     grid-template-columns: 50% 50%;
 }
+
+.shop-list {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 20px;
+}
+
+button {
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 5px;
+
+    p {
+        margin-top: 20px;
+    }
+
+    .shop-icon {
+        width: 100px;
+        height: 100px;
+    }
+}

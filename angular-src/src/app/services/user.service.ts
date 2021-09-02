@@ -44,6 +44,11 @@ export class UserService {
       this.authToken = null
       this.user = null
       localStorage.clear()
+    }, (err)=>{
+      console.log(err)
+      this.authToken = null;
+      this.user = null
+      localStorage.clear()
     })
   }
 

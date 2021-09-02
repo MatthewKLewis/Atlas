@@ -2,23 +2,20 @@ const mongoose = require('../connection');
 
 const Schema = mongoose.Schema
 
-const mapSchema = new Schema({
+const shopItemSchema = new Schema({
         "name": {
             type: String,
             required: true
         },
-        "width": {
+        "description": {
+            type: String,
+            required: true
+        },
+        "price": {
             type: Number,
             required: true
         },
-        "height": {
-            type: Number,
-            required: true
-        },
-        "userId": {
-            type: String
-        }
     }
 );
   
-module.exports = mongoose.model("Map", mapSchema);
+module.exports = mongoose.model("ShopItem", shopItemSchema);

@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ShopService } from '../services/shop.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -17,13 +18,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   clock: any
-  shopInventory: Map<string, any> = new Map()
+  shopInventory: any[] = []
   
-  constructor(public userService: UserService, private router: Router) { }
+  constructor(public userService: UserService, public shopService: ShopService, private router: Router) { }
 
   ngOnInit(): void {
-    this.shopInventory.set('gundarium', {name: 'gundarium', price: 5, description: 'lunar titanium alloy'})
-
+    this.shopService.getShopItems().subscribe((res:any)=>{
+      console.log(res)
+      this.shopInventory = res.list
+    })
     this.userService.getProfile().subscribe((res:any)=>{
       this.userService.user = res.user
       this.clock = setInterval(()=>{
@@ -31,7 +34,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }, 1000)
     },
     (err)=>{
-      console.log('ERROR!')
       console.log(err)
     })
   }
@@ -44,11 +46,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   buy(shopItem: string) {
-    var item = this.shopInventory.get(shopItem)
+    var item = this.shopInventory.find((item)=> {return item.name == shopItem})
     if (item && item.price <= this.userService.user.money) {
-      this.userService.user.money -= item.price;
-      this.userService.user.inventory.push(item)
-      console.log(item)
+      if (!this.userService.user.inventory) {
+        this.userService.user.inventory = {}
+      }
+      if (item.name in this.userService.user.inventory) {
+        this.userService.user.money -= item.price;
+        this.userService.user.inventory[item.name] ++;
+      } else {
+        this.userService.user.money -= item.price;
+        this.userService.user.inventory[item.name] = 1
+      }
       this.userService.updateInventoryAndMoney().subscribe((res:any)=>{
         console.log(res)
       })
