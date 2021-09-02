@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './guards/auth.guard';
 
+import {DragDropModule} from '@angular/cdk/drag-drop'; 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +28,7 @@ import { AuthGuard } from './guards/auth.guard';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    DragDropModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
