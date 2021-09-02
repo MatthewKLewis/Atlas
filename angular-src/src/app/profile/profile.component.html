@@ -1,12 +1,12 @@
-<div class="user-grid" *ngIf="user">
+<div class="user-grid" *ngIf="userService.user">
     <div>
-        <p>User: {{user.username}} E-mail: {{user.email}}</p>
-        <p>Credits: {{user.money}}</p>
+        <p>User: {{userService.user.username}} E-mail: {{userService.user.email}}</p>
+        <p>Credits: {{userService.user.money}}</p>
 
         <hr>
 
         <p>Inventory</p>
-        <div *ngFor="let item of user.inventory; let index = index">
+        <div *ngFor="let item of userService.user.inventory; let index = index">
             <p>{{index}}. {{item.name}}</p>
         </div>
     </div>
