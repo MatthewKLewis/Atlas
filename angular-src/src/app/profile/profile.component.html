@@ -1,43 +1,41 @@
-<div class="user-grid" *ngIf="userService.user">
-    <div class="grid-el">
-        <p>User: {{userService.user.username}}</p> 
-        <p>E-mail: {{userService.user.email}}</p>
-        <h3>Credits: {{userService.user.money}}</h3>
-
-        <hr>
-
-        <p>Inventory</p>
-        <div class="inventory-grid">
-            <div 
-                class="inventory-tile" 
-                *ngFor="let item of userService.user.inventory | keyvalue"
-                cdkDrag>
-                <span>{{item.value}}</span>
-                <p>{{item.key}}</p>
-            </div>
-        </div>
+<div class="user-grid" *ngIf="userService?.user?.inventory">
+  <div class="grid-el">
+    <p>User: {{ userService.user.username }}</p>
+    <p>E-mail: {{ userService.user.email }}</p>
+    <p>Credits: {{ userService.user.money }}</p>
+    <hr />
+    <!-- INVENTORY -->
+    <p>Inventory</p>
+    <div class="inventory-grid">
+      <div class="inventory-tile" *ngFor="let item of returnStackedInventory() | keyvalue">
+        <p>{{item.key}} - {{item.value}}</p>
+        <button (click)="sell($event, item)">SELL</button>
+      </div>
     </div>
+  </div>
 
-    <div class="shop-list grid-el">
-        <button 
-            *ngFor="let item of shopInventory; let index = index"
-            [disabled]="item.price > userService.user.money" 
-            (click)="buy(item.name)">
-            <img class="shop-icon" src="#">
-            <div class="details">
-                <p>${{item.price.toLocaleString()}}</p>
-                <p>Buy {{item.name}}</p>
-            </div>
-        </button>
-    </div>
+  <!-- BUYING -->
+  <div class="shop-list grid-el">
+    <button
+      *ngFor="let item of shopInventory; let index = index"
+      [disabled]="item.price > userService.user.money"
+      (click)="buy(item.name)"
+    >
+      <img class="shop-icon" src="#" />
+      <div class="details">
+        <p>${{ item.price.toLocaleString() }}</p>
+        <p>Buy {{ item.name }}</p>
+      </div>
+    </button>
+  </div>
 
-    <div class="grid-el">
-        Mannquin
-    </div>
+  <!-- CRAFTING -->
+  <div class="crafting-bench-grid grid-el">
+      <div *ngFor="let item of craftingBench">
+          X
+      </div>
+  </div>
 
-    <div class="grid-el">
-        Last
-    </div>
-
-
+  <!-- CREDITS? -->
+  <div class="grid-el">Last</div>
 </div>

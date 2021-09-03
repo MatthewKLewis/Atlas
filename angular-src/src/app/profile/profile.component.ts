@@ -6,61 +6,101 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-
-  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
-    this.userService.updateInventoryAndMoney().subscribe((res:any)=>{
-      console.log(res)
-    })
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+    this.userService.updateInventoryAndMoney().subscribe((res: any) => {
+      console.log(res);
+    });
     event.returnValue = false;
   }
 
-  clock: any
-  shopInventory: any[] = []
-  
-  constructor(public userService: UserService, public shopService: ShopService, private router: Router) { }
+  clock: any;
+  shopInventory: any[] = [];
+  craftingBench: any[] = [];
+
+  constructor(
+    public userService: UserService,
+    public shopService: ShopService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.shopService.getShopItems().subscribe((res:any)=>{
-      console.log(res)
-      this.shopInventory = res.list
-    })
-    this.userService.getProfile().subscribe((res:any)=>{
-      this.userService.user = res.user
-      this.clock = setInterval(()=>{
-        this.userService.user.money++;
-      }, 1000)
-    },
-    (err)=>{
-      console.log(err)
-    })
+    this.shopService.getShopItems().subscribe((res: any) => {
+      this.shopInventory = res.list;
+    });
+    this.userService.getProfile().subscribe(
+      (res: any) => {
+        this.userService.user = res.user;
+        this.clock = setInterval(() => {
+          this.userService.user.money++;
+        }, 1000);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   ngOnDestroy() {
-    clearInterval(this.clock)
-    this.userService.updateInventoryAndMoney().subscribe((res:any)=>{
-      console.log(res)
-    })
+    clearInterval(this.clock);
+    this.userService.updateInventoryAndMoney().subscribe((res: any) => {
+      console.log(res);
+    });
   }
 
   buy(shopItem: string) {
-    var item = this.shopInventory.find((item)=> {return item.name == shopItem})
+    var item = this.shopInventory.find((item) => {
+      return item.name == shopItem;
+    });
     if (item && item.price <= this.userService.user.money) {
-      if (!this.userService.user.inventory) {
-        this.userService.user.inventory = {}
-      }
-      if (item.name in this.userService.user.inventory) {
-        this.userService.user.money -= item.price;
-        this.userService.user.inventory[item.name] ++;
-      } else {
-        this.userService.user.money -= item.price;
-        this.userService.user.inventory[item.name] = 1
-      }
-      this.userService.updateInventoryAndMoney().subscribe((res:any)=>{
-        console.log(res)
-      })
+      //array based inventory
+      this.userService.user.money -= item.price;
+      this.userService.user.inventory.push({
+        name: item.name,
+        description: item.description,
+        value: item.price,
+      });
+      this.userService.updateInventoryAndMoney().subscribe((res: any) => {
+        console.log(res);
+      });
     }
+  }
+
+  sell(e: any, item: any) {
+    var foundIndex = this.userService.user.inventory.findIndex((el:any)=> el.name == item.key)
+    if (foundIndex != -1) {
+      this.userService.user.money += this.userService.user.inventory[foundIndex].value * .7
+      this.userService.user.inventory.splice(foundIndex, 1)
+    } else {
+      console.log('not in inventory error!')
+    }
+  }
+
+  //Display
+
+  returnStackedInventory(): Map<string, number> {
+    this.userService.sortInventory();
+    var stackedInventory: Map<string, number> = new Map();
+    var current = { name: 'error' };
+    var cnt = 0;
+    for (var i = 0; i < this.userService.user.inventory.length; i++) {
+      if (this.userService.user.inventory[i].name != current.name) {
+        if (cnt > 0) {
+          //console.log(current.name + ' comes --> ' + cnt + ' times');
+          stackedInventory.set(current.name, cnt);
+        }
+        current.name = this.userService.user.inventory[i].name;
+        cnt = 1;
+      } else {
+        cnt++;
+      }
+    }
+    if (cnt > 0) {
+      //console.log(current.name + ' COMES --> ' + cnt + ' times');
+      stackedInventory.set(current.name, cnt);
+    }
+    return stackedInventory;
   }
 }

@@ -19,9 +19,7 @@ const userSchema = new Schema({
         "lastLogin" : {
             type: Date,
         },
-        "inventory" : {
-            type: Object 
-        },
+        "inventory" : [{type: Object}],
         "money" : {
             type: Number,
         }

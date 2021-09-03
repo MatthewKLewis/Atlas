@@ -63,6 +63,7 @@ export class UserService {
 
   updateInventoryAndMoney() {
     this.loadToken();
+    this.sortInventory();
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authToken}`,
       'Content-Type': 'application/json'
@@ -73,5 +74,9 @@ export class UserService {
   loadToken() {
     const token = localStorage.getItem('id_token')
     this.authToken = token
+  }
+
+  sortInventory() {
+    this.user.inventory.sort((firstEl:any, secEl:any)=> {return firstEl.value - secEl.value})
   }
 }
