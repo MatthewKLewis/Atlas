@@ -37,9 +37,9 @@ router.post('/addNew', (req, res, next)=>{
 })
 
 //READ
-router.get('/all', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
-    console.log(req.body)
-    InventoryItem.find().then((items)=>{
+router.get('/all/:id', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
+    console.log(req.params.id)
+    InventoryItem.find({owner: req.params.id}).then((items)=>{
         res.json({success: true, list: items})
     })
 })
