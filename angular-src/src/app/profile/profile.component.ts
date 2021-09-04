@@ -28,17 +28,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // forkJoin([
+    //   this.shopService.getShopItems(),
+    //   this.userService.getProfile()
+    // ]).subscribe(([shop, prof])=>{
+    //   this.shopInventory = shop.list;
+    //   this.userService.user = prof.user;
+    //   this.clock = setInterval(() => {
+    //     this.tick()
+    //   }, 1000);
+    // })
 
-    forkJoin([
-      this.shopService.getShopItems(),
-      this.userService.getProfile()
-    ]).subscribe(([shop, prof])=>{
-      this.shopInventory = shop.list;
-      this.userService.user = prof.user;
+    this.shopService.getShopItems().subscribe((res: any) => {
+      this.shopInventory = res.list;
+    });
+
+    this.userService.getProfile().subscribe((res: any) => {
+      this.userService.user = res.user;
       this.clock = setInterval(() => {
-        this.tick()
+        this.tick();
       }, 1000);
-    })
+    });
   }
   ngOnDestroy() {
     clearInterval(this.clock);
@@ -69,12 +79,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
   sell(e: any, item: any) {
-    var foundIndex = this.userService.user.inventory.findIndex((el:any)=> el.name == item.key)
+    var foundIndex = this.userService.user.inventory.findIndex(
+      (el: any) => el.name == item.key
+    );
     if (foundIndex != -1) {
-      this.userService.user.money += this.userService.user.inventory[foundIndex].value * .7
-      this.userService.user.inventory.splice(foundIndex, 1)
+      this.userService.user.money +=
+        this.userService.user.inventory[foundIndex].value * 0.7;
+      this.userService.user.inventory.splice(foundIndex, 1);
     } else {
-      console.log('not in inventory error!')
+      console.log('not in inventory error!');
     }
   }
 
