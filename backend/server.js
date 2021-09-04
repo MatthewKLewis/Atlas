@@ -12,7 +12,7 @@ const User = require("./models/user.model")
 //Routes
 const userRoutes = require('./routes/users')
 const shopItemRoutes = require('./routes/shopItems')
-
+const inventoryItemRoutes = require('./routes/inventoryItems')
 
 //Configuring...
 const port = process.env.PORT || 4000
@@ -26,6 +26,7 @@ require('./passport')(passport)
 //Route Registration
 app.use('/users', userRoutes)
 app.use('/shopItems', shopItemRoutes)
+app.use('/inventoryItems', inventoryItemRoutes)
 
 //Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')))

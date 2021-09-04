@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 
 const inventoryItemSchema = new Schema({
   createdOn: Date,
-  assignedOn: Date,
   name: String,
   description: String,
   stats: Object,
