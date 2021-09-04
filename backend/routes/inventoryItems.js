@@ -9,6 +9,12 @@ const User = require('../models/user.model')
 
 function randomItem() {
 
+    var tempItem = {
+        name: randomName(),
+        weight: 1,
+        description: randomDescription()
+    }
+
 }
 
 function randomName() {
@@ -21,6 +27,9 @@ function randomDescription() {
 
 //CREATE
 router.post('/addNew', (req, res, next)=>{
+
+    let tempItem = randomItem()
+
     let newShopItem = new InventoryItem({
         createdOn: Date.now(),
         name: randomName(),

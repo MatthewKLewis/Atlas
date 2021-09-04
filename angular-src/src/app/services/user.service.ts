@@ -63,7 +63,12 @@ export class UserService {
   }
 
   getInventory(): Observable<any> {
-    return this.http.get('http://localhost:4100/inventoryItems/all/')
+    this.loadToken();
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authToken}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(`http://localhost:4100/inventoryItems/all/${this.user._id}`, {headers: headers})
   }
 
 

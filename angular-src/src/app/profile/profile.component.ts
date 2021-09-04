@@ -20,7 +20,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   clock: any;
   inventory: any[] = [];
   shopInventory: any[] = [];
-  craftingBench: any[] = [];
+
+  showAll: boolean = false;
 
   constructor(
     public userService: UserService,
@@ -35,7 +36,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.shopInventory = shop.list;
       this.userService.user = prof.user;
       this.userService.getInventory().subscribe((res:any)=>{
-
+        this.inventory = res.list
+        this.showAll = true;
       })
       this.clock = setInterval(() => {
         this.tick();

@@ -1,4 +1,4 @@
-<div class="user-grid" *ngIf="userService?.user?.inventory">
+<div class="user-grid" *ngIf="showAll">
   <div class="grid-el">
     <p>User: {{ userService.user.username }}</p>
     <p>E-mail: {{ userService.user.email }}</p>
@@ -30,9 +30,7 @@
 
   <!-- CRAFTING -->
   <div class="crafting-bench-grid grid-el">
-      <div *ngFor="let item of craftingBench">
-          X
-      </div>
+      X
   </div>
 
   <!-- CREDITS? -->
