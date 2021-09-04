@@ -28,7 +28,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-
     forkJoin([
       this.shopService.getShopItems(),
       this.userService.getProfile()
@@ -37,7 +36,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.user = prof.user;
       this.clock = setInterval(() => {
         this.tick()
-      }, 1000);
+      }, 10000);
     })
   }
   ngOnDestroy() {
@@ -48,7 +47,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   tick() {
-    this.userService.user.money++;
+    this.userService.user.money += 1;
   }
 
   buy(shopItem: string) {
@@ -60,7 +59,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.user.money -= item.price;
       this.userService.user.inventory.push({
         name: item.name,
-        description: item.description,
         value: item.price,
       });
       this.userService.updateInventoryAndMoney().subscribe((res: any) => {
@@ -69,12 +67,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
   sell(e: any, item: any) {
-    var foundIndex = this.userService.user.inventory.findIndex((el:any)=> el.name == item.key)
+    var foundIndex = this.userService.user.inventory.findIndex(
+      (el: any) => el.name == item.key
+    );
     if (foundIndex != -1) {
-      this.userService.user.money += this.userService.user.inventory[foundIndex].value * .7
-      this.userService.user.inventory.splice(foundIndex, 1)
+      this.userService.user.money +=
+        this.userService.user.inventory[foundIndex].value * 0.7;
+      this.userService.user.inventory.splice(foundIndex, 1);
     } else {
-      console.log('not in inventory error!')
+      console.log('not in inventory error!');
     }
   }
 

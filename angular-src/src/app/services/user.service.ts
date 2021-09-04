@@ -31,7 +31,7 @@ export class UserService {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     return this.http
-      .post('http://localhost:4100/users/authenticate', user, { headers: headers })
+      .post('http://localhost:4100/users/authenticate', {username: user.username, password: user.password}, { headers: headers })
   }
 
   checkExpired() {
