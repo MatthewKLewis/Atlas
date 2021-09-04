@@ -7,9 +7,8 @@
     <!-- INVENTORY -->
     <p>Inventory</p>
     <div class="inventory-grid">
-      <div class="inventory-tile" *ngFor="let item of returnStackedInventory() | keyvalue">
-        <p>{{item.key}} - {{item.value}}</p>
-        <button (click)="sell($event, item)">SELL</button>
+      <div *ngFor="let item of inventory">
+        <p>{{item.name}}</p>
       </div>
     </div>
   </div>
