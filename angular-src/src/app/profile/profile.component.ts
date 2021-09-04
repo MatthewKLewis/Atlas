@@ -34,6 +34,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ]).subscribe(([shop, prof]) => {
       this.shopInventory = shop.list;
       this.userService.user = prof.user;
+      this.userService.getInventory().subscribe((res:any)=>{
+
+      })
       this.clock = setInterval(() => {
         this.tick();
       }, 10000);
@@ -55,7 +58,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
     if (item && item.price <= this.userService.user.money) {
       this.userService.user.money -= item.price;
-      this.shopService.addNewItem().subscribe((res: any) => {
+      this.userService.addNewItem().subscribe((res: any) => {
         this.userService.user.inventory.push({ _id: res.item._id });
         this.inventory.push(res.item);
       });

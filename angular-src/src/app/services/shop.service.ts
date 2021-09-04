@@ -20,8 +20,4 @@ export class ShopService {
     return this.http.get('http://localhost:4100/shopItems/all', {headers: headers})
   }
 
-  addNewItem(): Observable<any> {
-    return this.http.post('http://localhost:4100/inventoryItems/addNew', this.userService.user)
-  }
-
 }

@@ -38,13 +38,10 @@ router.post('/addNew', (req, res, next)=>{
 
 //READ
 router.get('/all', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
-    ShopItem.find().then((items)=>{
+    console.log(req.body)
+    InventoryItem.find().then((items)=>{
         res.json({success: true, list: items})
     })
-})
-
-router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
-    ShopItem.findById(req.params.id)
 })
 
 //UPDATE
