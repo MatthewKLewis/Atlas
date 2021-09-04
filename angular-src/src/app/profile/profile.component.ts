@@ -2,6 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ShopService } from '../services/shop.service';
 import { UserService } from '../services/user.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -27,27 +28,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.shopService.getShopItems().subscribe((res: any) => {
-      this.shopInventory = res.list;
-    });
-    this.userService.getProfile().subscribe(
-      (res: any) => {
-        this.userService.user = res.user;
-        this.clock = setInterval(() => {
-          this.userService.user.money++;
-        }, 1000);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
 
+    forkJoin([
+      this.shopService.getShopItems(),
+      this.userService.getProfile()
+    ]).subscribe(([shop, prof])=>{
+      this.shopInventory = shop.list;
+      this.userService.user = prof.user;
+      this.clock = setInterval(() => {
+        this.tick()
+      }, 1000);
+    })
+  }
   ngOnDestroy() {
     clearInterval(this.clock);
     this.userService.updateInventoryAndMoney().subscribe((res: any) => {
       console.log(res);
     });
+  }
+
+  tick() {
+    this.userService.user.money++;
   }
 
   buy(shopItem: string) {
@@ -67,7 +68,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
     }
   }
-
   sell(e: any, item: any) {
     var foundIndex = this.userService.user.inventory.findIndex((el:any)=> el.name == item.key)
     if (foundIndex != -1) {
@@ -79,7 +79,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   //Display
-
   returnStackedInventory(): Map<string, number> {
     this.userService.sortInventory();
     var stackedInventory: Map<string, number> = new Map();

@@ -1,4 +1,4 @@
-<button [routerLink]="['/']">home </button>
+<button *ngIf="userService.checkExpired()" [routerLink]="['/']">home </button>
 <button *ngIf="!userService.checkExpired()" [routerLink]="['profile']">profile </button>
 <button *ngIf="userService.checkExpired()" [routerLink]="['register']">create account </button>
 
