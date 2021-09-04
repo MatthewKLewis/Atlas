@@ -28,27 +28,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // forkJoin([
-    //   this.shopService.getShopItems(),
-    //   this.userService.getProfile()
-    // ]).subscribe(([shop, prof])=>{
-    //   this.shopInventory = shop.list;
-    //   this.userService.user = prof.user;
-    //   this.clock = setInterval(() => {
-    //     this.tick()
-    //   }, 1000);
-    // })
-
-    this.shopService.getShopItems().subscribe((res: any) => {
-      this.shopInventory = res.list;
-    });
-
-    this.userService.getProfile().subscribe((res: any) => {
-      this.userService.user = res.user;
+    forkJoin([
+      this.shopService.getShopItems(),
+      this.userService.getProfile()
+    ]).subscribe(([shop, prof])=>{
+      this.shopInventory = shop.list;
+      this.userService.user = prof.user;
       this.clock = setInterval(() => {
-        this.tick();
-      }, 1000);
-    });
+        this.tick()
+      }, 10000);
+    })
   }
   ngOnDestroy() {
     clearInterval(this.clock);
@@ -58,7 +47,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   tick() {
-    this.userService.user.money++;
+    this.userService.user.money += 1;
   }
 
   buy(shopItem: string) {
@@ -70,7 +59,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.user.money -= item.price;
       this.userService.user.inventory.push({
         name: item.name,
-        description: item.description,
         value: item.price,
       });
       this.userService.updateInventoryAndMoney().subscribe((res: any) => {
