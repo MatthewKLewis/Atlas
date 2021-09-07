@@ -3,27 +3,14 @@ const router = express.Router()
 const cors = require('cors')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
+
 const InventoryItem = require('../models/inventoryItem.model')
 const User = require('../models/user.model')
+const RandomItemGenerator = require('../generators/randomItemGenerator');
 
+let randomIG = new RandomItemGenerator()
+console.log(randomIG.getRandomItem())
 
-function randomItem() {
-
-    var tempItem = {
-        name: randomName(),
-        weight: 1,
-        description: randomDescription()
-    }
-
-}
-
-function randomName() {
-    return 'Steve'
-}
-
-function randomDescription() {
-    return 'Steve'
-}
 
 //CREATE
 router.post('/addNew', (req, res, next)=>{
