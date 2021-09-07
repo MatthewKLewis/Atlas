@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 const inventoryItemSchema = new Schema({
   createdOn: Date,
   name: String,
-  description: String,
-  stats: Object,
+  rarity: String,
+  type: String,
   owner: { type: Schema.Types.ObjectId, ref: "User" },
 });
 

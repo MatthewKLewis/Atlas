@@ -15,13 +15,13 @@ console.log(randomIG.getRandomItem())
 //CREATE
 router.post('/addNew', (req, res, next)=>{
 
-    let tempItem = randomItem()
+    let tempItem = randomIG.getRandomItem()
 
     let newShopItem = new InventoryItem({
         createdOn: Date.now(),
-        name: randomName(),
-        description: randomDescription(),
-        stats: {},
+        name: tempItem.name,
+        type: tempItem.type,
+        rarity: tempItem.rarity,
         owner: req.body._id
     });
     newShopItem.save()
