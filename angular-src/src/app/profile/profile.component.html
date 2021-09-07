@@ -5,10 +5,11 @@
     <p>Credits: {{ userService.user.money }}</p>
     <hr />
     <!-- INVENTORY -->
-    <p>Inventory</p>
+    <p>Inventory:</p>
     <div class="inventory-grid">
-      <div *ngFor="let item of inventory">
-        <p>{{item.name}}</p>
+      <div class="inventory-tile" *ngFor="let item of inventory">
+        <b>{{item.name}} </b>
+        <p>{{item.rarity}} {{item.type}}</p>
       </div>
     </div>
   </div>
